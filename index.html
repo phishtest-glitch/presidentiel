@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qui sera le prochain président ?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #131D38;
+    --ink-2: #1C2C52;
+    --ink-3: #24365F;
+    --paper: #F7F2E7;
+    --paper-dim: #C9C2AE;
+    --brick: #B0393F;
+    --brick-soft: rgba(176,57,63,0.16);
+    --gold: #D2A64C;
+    --gold-soft: rgba(210,166,76,0.16);
+    --silver: #A9B4CC;
+    --silver-soft: rgba(169,180,204,0.14);
+    --bronze: #C08151;
+    --bronze-soft: rgba(192,129,81,0.16);
+    --slate: #8C9AB8;
+    --line: rgba(247,242,231,0.1);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(210,166,76,0.10), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 110% 10%, rgba(176,57,63,0.10), transparent 55%),
+      var(--ink);
+    color: var(--paper);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  .wrap {
+    max-width: 660px;
+    margin: 0 auto;
+    padding: 64px 24px 80px;
+  }
+
+  /* ---- hero ---- */
+  .hero {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 8px;
+  }
+
+  .hero-text { flex: 1; min-width: 0; }
+
+  .tag {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--gold);
+    background: var(--gold-soft);
+    border: 1px solid rgba(210,166,76,0.35);
+    padding: 5px 12px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(2.1rem, 6vw, 3rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 0 0 16px;
+    color: var(--paper);
+  }
+
+  .hero .sub {
+    font-size: 1.02rem;
+    line-height: 1.6;
+    color: var(--slate);
+    max-width: 44ch;
+    margin: 0;
+  }
+
+  /* ---- cockade badge ---- */
+  .cockade {
+    position: relative;
+    width: 96px;
+    height: 96px;
+    flex-shrink: 0;
+    margin-top: 6px;
+    transform: rotate(-8deg);
+  }
+  .cockade .ribbon {
+    position: absolute;
+    bottom: -22px;
+    width: 15px;
+    height: 38px;
+    background: var(--ink-3);
+    border: 1px solid var(--line);
+  }
+  .cockade .ribbon.left {
+    left: 22px;
+    transform: rotate(10deg);
+    clip-path: polygon(0 0, 100% 0, 100% 78%, 50% 100%, 0 78%);
+  }
+  .cockade .ribbon.right {
+    right: 22px;
+    transform: rotate(-6deg);
+    clip-path: polygon(0 0, 100% 0, 100% 78%, 50% 100%, 0 78%);
+  }
+  .cockade .disc {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: repeating-conic-gradient(var(--brick) 0deg 15deg, var(--gold) 15deg 30deg);
+    box-shadow: 0 10px 26px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(0,0,0,0.15);
+  }
+  .cockade .ring {
+    position: absolute;
+    inset: 14%;
+    border-radius: 50%;
+    background: var(--ink);
+    border: 1.5px solid var(--paper-dim);
+  }
+  .cockade .center {
+    position: absolute;
+    inset: 38%;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
+  }
+
+  /* ---- status ---- */
+  .status {
+    min-height: 20px;
+    font-size: 0.88rem;
+    color: var(--gold);
+    margin: 28px 0 4px;
+  }
+
+  /* ---- podium ---- */
+  .podium {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 14px;
+    margin: 20px 0 36px;
+    padding-top: 10px;
+  }
+
+  .podium.empty {
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 150px;
+    border: 1px dashed var(--line);
+    border-radius: 10px;
+  }
+  .podium-empty-mark {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1.5px dashed var(--slate);
+  }
+  .podium-empty-text {
+    font-size: 0.88rem;
+    color: var(--slate);
+  }
+
+  .p-spot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 132px;
+    cursor: pointer;
+  }
+  .p-spot.disabled { cursor: default; }
+  .p-spot[data-place="1"] { order: 2; }
+  .p-spot[data-place="2"] { order: 1; }
+  .p-spot[data-place="3"] { order: 3; }
+
+  .p-badge {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 1.15rem;
+    margin-bottom: 10px;
+    border: 1.5px solid;
+    flex-shrink: 0;
+  }
+  .p-spot[data-place="1"] .p-badge { background: var(--gold-soft); border-color: var(--gold); color: var(--gold); }
+  .p-spot[data-place="2"] .p-badge { background: var(--silver-soft); border-color: var(--silver); color: var(--silver); }
+  .p-spot[data-place="3"] .p-badge { background: var(--bronze-soft); border-color: var(--bronze); color: var(--bronze); }
+
+  .p-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+    line-height: 1.3;
+    margin-bottom: 2px;
+  }
+  .p-party {
+    font-size: 0.74rem;
+    color: var(--slate);
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .p-pct {
+    font-family: 'Fraunces', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--paper);
+    margin-bottom: 10px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .p-bar {
+    width: 100%;
+    background: var(--ink-2);
+    border: 1px solid var(--line);
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    transition: height 0.6s cubic-bezier(0.22,1,0.36,1);
+  }
+  .p-spot[data-place="1"] .p-bar { background: linear-gradient(180deg, rgba(210,166,76,0.22), var(--ink-2)); }
+  .p-spot.voted .p-badge { box-shadow: 0 0 0 3px rgba(210,166,76,0.35); }
+
+  /* ---- rest list ---- */
+  .rest-label {
+    font-size: 0.85rem;
+    color: var(--slate);
+    margin: 0 0 6px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+  }
+
+  .candidates {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 4px;
+    border-bottom: 1px solid var(--line);
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .row:hover:not(.disabled) { background: rgba(247,242,231,0.03); }
+  .row.disabled { cursor: default; }
+
+  .rank {
+    font-family: 'Fraunces', serif;
+    font-size: 1.05rem;
+    color: var(--slate);
+    width: 20px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--ink);
+    flex-shrink: 0;
+  }
+
+  .info { flex: 1; min-width: 0; }
+
+  .name-line {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .name { font-weight: 600; font-size: 0.95rem; color: var(--paper); }
+  .party { font-size: 0.78rem; color: var(--slate); }
+  .check {
+    font-size: 0.74rem;
+    color: var(--gold);
+    font-weight: 600;
+    margin-left: auto;
+    padding-left: 8px;
+    white-space: nowrap;
+  }
+
+  .bar-track {
+    height: 5px;
+    background: var(--ink-2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    background: var(--slate);
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.5s cubic-bezier(0.22,1,0.36,1);
+  }
+
+  .pct {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--paper);
+    width: 42px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* ---- foot ---- */
+  .foot {
+    margin-top: 26px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .total { font-size: 0.88rem; color: var(--slate); }
+  .total strong { color: var(--paper); font-variant-numeric: tabular-nums; }
+
+  .reset {
+    background: none;
+    border: none;
+    color: var(--slate);
+    font-size: 0.8rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    padding: 0;
+  }
+  .reset:hover { color: var(--paper); }
+
+  .disclaimer {
+    margin-top: 34px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+    font-size: 0.82rem;
+    line-height: 1.65;
+    color: var(--slate);
+  }
+
+  /* ---- polls section ---- */
+  .polls-section {
+    margin-top: 44px;
+    padding-top: 26px;
+    border-top: 1px solid var(--line);
+  }
+  .polls-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--paper);
+    margin: 0 0 6px;
+  }
+  .polls-sub {
+    font-size: 0.85rem;
+    color: var(--slate);
+    margin: 0 0 22px;
+    line-height: 1.55;
+  }
+  .poll-card {
+    background: var(--ink-2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+  }
+  .poll-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .poll-inst { font-weight: 600; font-size: 0.92rem; color: var(--paper); }
+  .poll-date { font-size: 0.8rem; color: var(--slate); }
+  .poll-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+  }
+  .poll-name { font-size: 0.86rem; color: var(--paper); width: 150px; flex-shrink: 0; }
+  .poll-track {
+    flex: 1;
+    height: 5px;
+    background: var(--ink-3);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .poll-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 3px;
+  }
+  .poll-pct {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    font-size: 0.85rem;
+    width: 42px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .poll-note {
+    font-size: 0.78rem;
+    color: var(--slate);
+    margin: 12px 0 0;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 460px) {
+    .cockade { display: none; }
+    .p-spot { width: 96px; }
+    .p-name { font-size: 0.8rem; }
+    .p-pct { font-size: 1.1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="hero-text">
+      <span class="tag">Présidentielle 2027</span>
+      <h1>Qui sera le prochain président ?</h1>
+      <p class="sub">Votez pour votre pronostic — pas forcément pour votre camp. Le classement reflète les votes de tous les visiteurs, en direct.</p>
+    </div>
+    <div class="cockade" aria-hidden="true">
+      <div class="ribbon left"></div>
+      <div class="ribbon right"></div>
+      <div class="disc"></div>
+      <div class="ring"></div>
+      <div class="center"></div>
+    </div>
+  </div>
+
+  <div class="status" id="status"></div>
+
+  <div class="podium" id="podium"></div>
+
+  <p class="rest-label" id="restLabel">Le reste du classement</p>
+  <ul class="candidates" id="candidates"></ul>
+
+  <div class="foot">
+    <p class="total" id="total"></p>
+    <button class="reset" id="reset" style="display:none;">Changer mon vote</button>
+  </div>
+
+  <p class="disclaimer">
+    Site de pronostic communautaire, sans lien avec un institut de sondage et sans valeur scientifique. Un vote par visiteur. Les résultats reflètent l'opinion des internautes qui participent ici, pas une intention de vote représentative de la population française.
+  </p>
+
+  <div class="polls-section">
+    <h2 class="polls-title">Derniers sondages</h2>
+    <p class="polls-sub">Chiffres publiés par les instituts, mis à jour à la main. Ceci n'est pas le vote ci-dessus : ce sont de vraies intentions de vote mesurées auprès d'échantillons représentatifs.</p>
+    <div id="pollsList"></div>
+  </div>
+
+</div>
+
+<script>
+  const CANDIDATES = [
+    { id: 'melenchon',   name: 'Jean-Luc Mélenchon',  party: 'La France insoumise' },
+    { id: 'lepen',       name: 'Marine Le Pen',       party: 'Rassemblement national' },
+    { id: 'attal',       name: 'Gabriel Attal',       party: 'Renaissance' },
+    { id: 'philippe',    name: 'Édouard Philippe',    party: 'Horizons' },
+    { id: 'glucksmann',  name: 'Raphaël Glucksmann',  party: 'Place publique' },
+    { id: 'retailleau',  name: 'Bruno Retailleau',    party: 'Les Républicains' },
+    { id: 'autre',       name: 'Autre / surprise',    party: '—' },
+  ];
+
+  const TALLY_KEY = 'votes-tally';
+  const VOTE_KEY = 'voted-for';
+
+  const podiumEl = document.getElementById('podium');
+  const listEl = document.getElementById('candidates');
+  const restLabelEl = document.getElementById('restLabel');
+  const statusEl = document.getElementById('status');
+  const totalEl = document.getElementById('total');
+  const resetEl = document.getElementById('reset');
+
+  let tally = {};
+  let votedFor = null;
+
+  function initials(name) {
+    return name.split(' ').filter(w => w[0] === w[0].toUpperCase()).map(w => w[0]).join('').slice(0, 2);
+  }
+
+  const AVATAR_TONES = ['#D2A64C', '#B0393F', '#A9B4CC', '#C08151', '#8C9AB8', '#E0BE7A', '#C77B7E', '#7C8CB0'];
+  function avatarTone(id) {
+    let hash = 0;
+    for (let i = 0; i < id.length; i++) hash = (hash * 31 + id.charCodeAt(i)) % AVATAR_TONES.length;
+    return AVATAR_TONES[hash];
+  }
+
+  function setStatus(msg) { statusEl.textContent = msg || ''; }
+
+  async function loadState() {
+    setStatus('Chargement des résultats…');
+    try {
+      const shared = await window.storage.get(TALLY_KEY, true);
+      tally = shared ? JSON.parse(shared.value) : {};
+    } catch (e) { tally = {}; }
+    try {
+      const personal = await window.storage.get(VOTE_KEY, false);
+      votedFor = personal ? personal.value : null;
+    } catch (e) { votedFor = null; }
+    setStatus('');
+    render();
+  }
+
+  async function castVote(id) {
+    if (votedFor) return;
+    setStatus('Enregistrement de ton vote…');
+    tally[id] = (tally[id] || 0) + 1;
+    votedFor = id;
+    render();
+    try {
+      await window.storage.set(TALLY_KEY, JSON.stringify(tally), true);
+      await window.storage.set(VOTE_KEY, id, false);
+      setStatus('Vote enregistré. Merci !');
+      setTimeout(() => setStatus(''), 2000);
+    } catch (e) {
+      setStatus("Le vote n'a pas pu être sauvegardé, réessaie.");
+    }
+  }
+
+  async function resetVote() {
+    setStatus('Réinitialisation…');
+    if (votedFor && tally[votedFor]) tally[votedFor] = Math.max(0, tally[votedFor] - 1);
+    votedFor = null;
+    render();
+    try {
+      await window.storage.set(TALLY_KEY, JSON.stringify(tally), true);
+      await window.storage.delete(VOTE_KEY, false);
+      setStatus('');
+    } catch (e) {
+      setStatus('Impossible de réinitialiser pour le moment.');
+    }
+  }
+
+  function render() {
+    const totalVotes = Object.values(tally).reduce((a, b) => a + b, 0);
+    const sorted = [...CANDIDATES].sort((a, b) => (tally[b.id] || 0) - (tally[a.id] || 0));
+    const maxVotes = Math.max(1, ...sorted.map(c => tally[c.id] || 0));
+
+    const top3 = totalVotes ? sorted.slice(0, 3) : [];
+    const rest = totalVotes ? sorted.slice(3) : sorted;
+
+    // podium
+    podiumEl.innerHTML = '';
+    if (!totalVotes) {
+      podiumEl.classList.add('empty');
+      podiumEl.innerHTML = `
+        <div class="podium-empty-mark"></div>
+        <div class="podium-empty-text">Personne n'a encore voté — sois le premier</div>
+      `;
+      restLabelEl.textContent = 'Tous les candidats';
+      renderRest(rest, 0, 1);
+      totalEl.innerHTML = `<strong>0</strong> vote exprimé`;
+      resetEl.style.display = 'none';
+      return;
+    }
+    podiumEl.classList.remove('empty');
+    restLabelEl.textContent = 'Le reste du classement';
+    top3.forEach((c, i) => {
+      const place = i + 1;
+      const votes = tally[c.id] || 0;
+      const pct = totalVotes ? Math.round((votes / totalVotes) * 100) : 0;
+      const heights = { 1: 118, 2: 82, 3: 60 };
+      const barHeight = totalVotes ? Math.max(28, (votes / maxVotes) * heights[place]) : heights[place] * 0.35;
+      const isVoted = votedFor === c.id;
+
+      const spot = document.createElement('div');
+      spot.className = 'p-spot' + (votedFor ? ' disabled' : '') + (isVoted ? ' voted' : '');
+      spot.dataset.place = place;
+      spot.innerHTML = `
+        <div class="p-badge">${initials(c.name)}</div>
+        <div class="p-name">${c.name}</div>
+        <div class="p-party">${c.party}</div>
+        <div class="p-pct">${pct}%</div>
+        <div class="p-bar" style="height:${barHeight}px"></div>
+      `;
+      if (!votedFor) spot.addEventListener('click', () => castVote(c.id));
+      podiumEl.appendChild(spot);
+    });
+
+    renderRest(rest, totalVotes, 4);
+
+    totalEl.innerHTML = `<strong>${totalVotes}</strong> vote${totalVotes === 1 ? '' : 's'} exprimé${totalVotes === 1 ? '' : 's'}`;
+    resetEl.style.display = votedFor ? 'inline' : 'none';
+  }
+
+  function renderRest(items, totalVotes, startRank) {
+    totalVotes = totalVotes || 0;
+    startRank = startRank || 1;
+    listEl.innerHTML = '';
+    items.forEach((c, i) => {
+      const votes = tally[c.id] || 0;
+      const pct = totalVotes ? Math.round((votes / totalVotes) * 100) : 0;
+      const isVoted = votedFor === c.id;
+
+      const li = document.createElement('li');
+      li.className = 'row' + (votedFor ? ' disabled' : '');
+      li.innerHTML = `
+        <span class="rank">${i + startRank}</span>
+        <div class="avatar" style="background:${avatarTone(c.id)}">${initials(c.name)}</div>
+        <div class="info">
+          <div class="name-line">
+            <span class="name">${c.name}</span>
+            <span class="party">${c.party}</span>
+            ${isVoted ? '<span class="check">Ton vote ✓</span>' : ''}
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+        </div>
+        <span class="pct">${pct}%</span>
+      `;
+      if (!votedFor) li.addEventListener('click', () => castVote(c.id));
+      listEl.appendChild(li);
+    });
+  }
+
+  // ---------------------------------------------------------------
+  // DERNIERS SONDAGES — à mettre à jour toi-même chaque semaine.
+  // Ajoute un nouvel objet en haut du tableau à chaque nouveau sondage.
+  // "results" : liste des candidats testés, du plus haut au plus bas score.
+  // ---------------------------------------------------------------
+  const POLLS = [
+    {
+      institute: 'Moyenne agrégée (5 derniers sondages)',
+      date: 'Mise à jour du 8 septembre 2026',
+      results: [
+        { name: 'Marine Le Pen', pct: 35 },
+        { name: 'Édouard Philippe', pct: 16.5 },
+        { name: 'Jean-Luc Mélenchon', pct: 16 },
+      ],
+      note: "Source : élections2027.com, moyenne simple des 5 dernières vagues (Ifop, Ipsos, Elabe, OpinionWay, Harris...). Ne constitue pas une prévision électorale."
+    },
+    {
+      institute: 'Ipsos bva–CESI / Le Parisien',
+      date: '5 septembre 2026',
+      results: [
+        { name: 'Marine Le Pen', pct: 35 },
+        { name: 'Édouard Philippe', pct: 15 },
+        { name: 'Jean-Luc Mélenchon', pct: 14 },
+        { name: 'Bruno Retailleau', pct: 8 },
+      ],
+      note: 'Terrain 31 août–2 septembre 2026, n=1500, méthode des quotas. Marge d\'erreur ±0,4 à 2,9 points selon les scores. Hypothèse testée : Glucksmann + Attal + Philippe.'
+    },
+  ];
+
+  function renderPolls() {
+    const pollsListEl = document.getElementById('pollsList');
+    pollsListEl.innerHTML = '';
+    POLLS.forEach(poll => {
+      const maxPct = Math.max(...poll.results.map(r => r.pct));
+      const card = document.createElement('div');
+      card.className = 'poll-card';
+      const rowsHtml = poll.results.map(r => `
+        <div class="poll-row">
+          <span class="poll-name">${r.name}</span>
+          <div class="poll-track"><div class="poll-fill" style="width:${(r.pct / maxPct) * 100}%"></div></div>
+          <span class="poll-pct">${r.pct}%</span>
+        </div>
+      `).join('');
+      card.innerHTML = `
+        <div class="poll-head">
+          <span class="poll-inst">${poll.institute}</span>
+          <span class="poll-date">${poll.date}</span>
+        </div>
+        ${rowsHtml}
+        ${poll.note ? `<p class="poll-note">${poll.note}</p>` : ''}
+      `;
+      pollsListEl.appendChild(card);
+    });
+  }
+
+  resetEl.addEventListener('click', resetVote);
+  loadState();
+  renderPolls();
+</script>
+
+</body>
+</html>
