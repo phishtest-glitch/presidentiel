@@ -1,711 +1,192 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Qui sera le prochain président ?</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Partir de France : trouve ton pays</title>
 <style>
-  :root {
-    --ink: #131D38;
-    --ink-2: #1C2C52;
-    --ink-3: #24365F;
-    --paper: #F7F2E7;
-    --paper-dim: #C9C2AE;
-    --brick: #B0393F;
-    --brick-soft: rgba(176,57,63,0.16);
-    --gold: #D2A64C;
-    --gold-soft: rgba(210,166,76,0.16);
-    --silver: #A9B4CC;
-    --silver-soft: rgba(169,180,204,0.14);
-    --bronze: #C08151;
-    --bronze-soft: rgba(192,129,81,0.16);
-    --slate: #8C9AB8;
-    --line: rgba(247,242,231,0.1);
-  }
-
-  * { box-sizing: border-box; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    margin: 0;
-    background:
-      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(210,166,76,0.10), transparent 60%),
-      radial-gradient(ellipse 700px 500px at 110% 10%, rgba(176,57,63,0.10), transparent 55%),
-      var(--ink);
-    color: var(--paper);
-    font-family: 'Inter', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    min-height: 100vh;
-  }
-
-  .wrap {
-    max-width: 660px;
-    margin: 0 auto;
-    padding: 64px 24px 80px;
-  }
-
-  /* ---- hero ---- */
-  .hero {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 24px;
-    margin-bottom: 8px;
-  }
-
-  .hero-text { flex: 1; min-width: 0; }
-
-  .tag {
-    display: inline-block;
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--gold);
-    background: var(--gold-soft);
-    border: 1px solid rgba(210,166,76,0.35);
-    padding: 5px 12px;
-    border-radius: 100px;
-    margin-bottom: 20px;
-  }
-
-  .hero h1 {
-    font-family: 'Fraunces', serif;
-    font-weight: 500;
-    font-size: clamp(2.1rem, 6vw, 3rem);
-    line-height: 1.12;
-    letter-spacing: -0.01em;
-    margin: 0 0 16px;
-    color: var(--paper);
-  }
-
-  .hero .sub {
-    font-size: 1.02rem;
-    line-height: 1.6;
-    color: var(--slate);
-    max-width: 44ch;
-    margin: 0;
-  }
-
-  /* ---- cockade badge ---- */
-  .cockade {
-    position: relative;
-    width: 96px;
-    height: 96px;
-    flex-shrink: 0;
-    margin-top: 6px;
-    transform: rotate(-8deg);
-  }
-  .cockade .ribbon {
-    position: absolute;
-    bottom: -22px;
-    width: 15px;
-    height: 38px;
-    background: var(--ink-3);
-    border: 1px solid var(--line);
-  }
-  .cockade .ribbon.left {
-    left: 22px;
-    transform: rotate(10deg);
-    clip-path: polygon(0 0, 100% 0, 100% 78%, 50% 100%, 0 78%);
-  }
-  .cockade .ribbon.right {
-    right: 22px;
-    transform: rotate(-6deg);
-    clip-path: polygon(0 0, 100% 0, 100% 78%, 50% 100%, 0 78%);
-  }
-  .cockade .disc {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    background: repeating-conic-gradient(var(--brick) 0deg 15deg, var(--gold) 15deg 30deg);
-    box-shadow: 0 10px 26px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(0,0,0,0.15);
-  }
-  .cockade .ring {
-    position: absolute;
-    inset: 14%;
-    border-radius: 50%;
-    background: var(--ink);
-    border: 1.5px solid var(--paper-dim);
-  }
-  .cockade .center {
-    position: absolute;
-    inset: 38%;
-    border-radius: 50%;
-    background: var(--gold);
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
-  }
-
-  /* ---- status ---- */
-  .status {
-    min-height: 20px;
-    font-size: 0.88rem;
-    color: var(--gold);
-    margin: 28px 0 4px;
-  }
-
-  /* ---- podium ---- */
-  .podium {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    gap: 14px;
-    margin: 20px 0 36px;
-    padding-top: 10px;
-  }
-
-  .podium.empty {
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    height: 150px;
-    border: 1px dashed var(--line);
-    border-radius: 10px;
-  }
-  .podium-empty-mark {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    border: 1.5px dashed var(--slate);
-  }
-  .podium-empty-text {
-    font-size: 0.88rem;
-    color: var(--slate);
-  }
-
-  .p-spot {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 132px;
-    cursor: pointer;
-  }
-  .p-spot.disabled { cursor: default; }
-  .p-spot[data-place="1"] { order: 2; }
-  .p-spot[data-place="2"] { order: 1; }
-  .p-spot[data-place="3"] { order: 3; }
-
-  .p-badge {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Fraunces', serif;
-    font-weight: 600;
-    font-size: 1.15rem;
-    margin-bottom: 10px;
-    border: 1.5px solid;
-    flex-shrink: 0;
-  }
-  .p-spot[data-place="1"] .p-badge { background: var(--gold-soft); border-color: var(--gold); color: var(--gold); }
-  .p-spot[data-place="2"] .p-badge { background: var(--silver-soft); border-color: var(--silver); color: var(--silver); }
-  .p-spot[data-place="3"] .p-badge { background: var(--bronze-soft); border-color: var(--bronze); color: var(--bronze); }
-
-  .p-name {
-    font-weight: 600;
-    font-size: 0.9rem;
-    text-align: center;
-    line-height: 1.3;
-    margin-bottom: 2px;
-  }
-  .p-party {
-    font-size: 0.74rem;
-    color: var(--slate);
-    text-align: center;
-    margin-bottom: 8px;
-  }
-  .p-pct {
-    font-family: 'Fraunces', serif;
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--paper);
-    margin-bottom: 10px;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .p-bar {
-    width: 100%;
-    background: var(--ink-2);
-    border: 1px solid var(--line);
-    border-bottom: none;
-    border-radius: 8px 8px 0 0;
-    transition: height 0.6s cubic-bezier(0.22,1,0.36,1);
-  }
-  .p-spot[data-place="1"] .p-bar { background: linear-gradient(180deg, rgba(210,166,76,0.22), var(--ink-2)); }
-  .p-spot.voted .p-badge { box-shadow: 0 0 0 3px rgba(210,166,76,0.35); }
-
-  /* ---- rest list ---- */
-  .rest-label {
-    font-size: 0.85rem;
-    color: var(--slate);
-    margin: 0 0 6px;
-    padding-top: 18px;
-    border-top: 1px solid var(--line);
-  }
-
-  .candidates {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 14px 4px;
-    border-bottom: 1px solid var(--line);
-    cursor: pointer;
-    transition: background 0.15s ease;
-  }
-  .row:hover:not(.disabled) { background: rgba(247,242,231,0.03); }
-  .row.disabled { cursor: default; }
-
-  .rank {
-    font-family: 'Fraunces', serif;
-    font-size: 1.05rem;
-    color: var(--slate);
-    width: 20px;
-    text-align: right;
-    flex-shrink: 0;
-  }
-
-  .avatar {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Fraunces', serif;
-    font-weight: 600;
-    font-size: 0.8rem;
-    color: var(--ink);
-    flex-shrink: 0;
-  }
-
-  .info { flex: 1; min-width: 0; }
-
-  .name-line {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-    margin-bottom: 6px;
-  }
-  .name { font-weight: 600; font-size: 0.95rem; color: var(--paper); }
-  .party { font-size: 0.78rem; color: var(--slate); }
-  .check {
-    font-size: 0.74rem;
-    color: var(--gold);
-    font-weight: 600;
-    margin-left: auto;
-    padding-left: 8px;
-    white-space: nowrap;
-  }
-
-  .bar-track {
-    height: 5px;
-    background: var(--ink-2);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-  .bar-fill {
-    height: 100%;
-    background: var(--slate);
-    border-radius: 3px;
-    width: 0%;
-    transition: width 0.5s cubic-bezier(0.22,1,0.36,1);
-  }
-
-  .pct {
-    font-variant-numeric: tabular-nums;
-    font-weight: 600;
-    font-size: 0.88rem;
-    color: var(--paper);
-    width: 42px;
-    text-align: right;
-    flex-shrink: 0;
-  }
-
-  /* ---- foot ---- */
-  .foot {
-    margin-top: 26px;
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .total { font-size: 0.88rem; color: var(--slate); }
-  .total strong { color: var(--paper); font-variant-numeric: tabular-nums; }
-
-  .reset {
-    background: none;
-    border: none;
-    color: var(--slate);
-    font-size: 0.8rem;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    cursor: pointer;
-    padding: 0;
-  }
-  .reset:hover { color: var(--paper); }
-
-  .disclaimer {
-    margin-top: 34px;
-    padding-top: 22px;
-    border-top: 1px solid var(--line);
-    font-size: 0.82rem;
-    line-height: 1.65;
-    color: var(--slate);
-  }
-
-  /* ---- polls section ---- */
-  .polls-section {
-    margin-top: 44px;
-    padding-top: 26px;
-    border-top: 1px solid var(--line);
-  }
-  .polls-title {
-    font-family: 'Fraunces', serif;
-    font-size: 1.3rem;
-    font-weight: 500;
-    color: var(--paper);
-    margin: 0 0 6px;
-  }
-  .polls-sub {
-    font-size: 0.85rem;
-    color: var(--slate);
-    margin: 0 0 22px;
-    line-height: 1.55;
-  }
-  .poll-card {
-    background: var(--ink-2);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 18px 20px;
-    margin-bottom: 14px;
-  }
-  .poll-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 10px;
-    margin-bottom: 14px;
-    flex-wrap: wrap;
-  }
-  .poll-inst { font-weight: 600; font-size: 0.92rem; color: var(--paper); }
-  .poll-date { font-size: 0.8rem; color: var(--slate); }
-  .poll-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 6px 0;
-  }
-  .poll-name { font-size: 0.86rem; color: var(--paper); width: 150px; flex-shrink: 0; }
-  .poll-track {
-    flex: 1;
-    height: 5px;
-    background: var(--ink-3);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-  .poll-fill {
-    height: 100%;
-    background: var(--gold);
-    border-radius: 3px;
-  }
-  .poll-pct {
-    font-variant-numeric: tabular-nums;
-    font-weight: 600;
-    font-size: 0.85rem;
-    width: 42px;
-    text-align: right;
-    flex-shrink: 0;
-  }
-  .poll-note {
-    font-size: 0.78rem;
-    color: var(--slate);
-    margin: 12px 0 0;
-    line-height: 1.5;
-  }
-
-  @media (max-width: 460px) {
-    .cockade { display: none; }
-    .p-spot { width: 96px; }
-    .p-name { font-size: 0.8rem; }
-    .p-pct { font-size: 1.1rem; }
-  }
+:root{--bg:#f6f4ef;--card:#fff;--tx:#1b1b1f;--mut:#6a6a72;--ac:#d6283a;--bd:#e4e0d6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121214;--card:#1d1d21;--tx:#f3f3f5;--mut:#9d9da6;--ac:#ff5c6c;--bd:#2d2d33}}
+:root[data-theme="dark"]{--bg:#121214;--card:#1d1d21;--tx:#f3f3f5;--mut:#9d9da6;--ac:#ff5c6c;--bd:#2d2d33}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.45}
+main{max-width:600px;margin:0 auto;padding:20px 16px 48px}
+.hero h1{font-size:1.55rem;line-height:1.2;margin:10px 0 8px}
+.hero p{color:var(--mut);margin:0 0 20px}
+.btn{display:block;width:100%;border:0;background:var(--ac);color:#fff;font-size:1.05rem;font-weight:600;padding:14px;border-radius:12px;cursor:pointer}
+.btn.sec{background:transparent;color:var(--tx);border:1px solid var(--bd);margin-top:10px;font-weight:500}
+.bar{height:6px;background:var(--bd);border-radius:3px;overflow:hidden;margin:6px 0 4px}
+.bar i{display:block;height:100%;background:var(--ac);transition:width .25s}
+.step{font-size:.8rem;color:var(--mut);display:flex;justify-content:space-between}
+.back{background:none;border:0;color:var(--mut);cursor:pointer;font-size:.85rem;padding:0}
+h2{font-size:1.25rem;margin:22px 0 4px}
+.hint{color:var(--mut);font-size:.88rem;margin:0 0 14px}
+.opts{display:flex;flex-direction:column;gap:9px}
+.opt{text-align:left;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:14px;border-radius:12px;font-size:1rem;cursor:pointer}
+.opt.on{border-color:var(--ac);box-shadow:0 0 0 2px var(--ac) inset}
+input[type=text],input[type=email],input[type=tel],select{width:100%;padding:14px;border:1px solid var(--bd);border-radius:12px;font-size:1rem;background:var(--card);color:var(--tx);margin-bottom:12px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:12px}
+.card h3{margin:0;font-size:1.15rem;display:flex;justify-content:space-between;gap:8px}
+.pct{color:var(--ac);font-weight:700}
+.meter{height:6px;background:var(--bd);border-radius:3px;margin:8px 0}
+.meter i{display:block;height:100%;background:var(--ac);border-radius:3px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.tag{font-size:.78rem;padding:3px 9px;border-radius:7px;background:var(--bg);border:1px solid var(--bd)}
+.card p{margin:6px 0 0;font-size:.9rem;color:var(--mut)}
+.warn{border-left:3px solid var(--ac);padding-left:10px}
+.note{font-size:.78rem;color:var(--mut);margin-top:26px;border-top:1px solid var(--bd);padding-top:12px}
+.hidden{display:none}
+.help{border:2px solid var(--ac);margin-top:22px}
+.help h3{display:block;margin-bottom:6px}
+.price{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:10px 12px;font-size:.88rem;margin:10px 0 14px}
+.chk{display:flex;gap:10px;align-items:flex-start;font-size:.82rem;color:var(--mut);margin:4px 0 14px}
+.chk input{margin-top:3px;width:18px;height:18px;flex:none}
+.msg{margin-top:10px;font-size:.9rem}
+.err{color:var(--ac)}
 </style>
 </head>
 <body>
-
-<div class="wrap">
-
-  <div class="hero">
-    <div class="hero-text">
-      <span class="tag">Présidentielle 2027</span>
-      <h1>Qui sera le prochain président ?</h1>
-      <p class="sub">Votez pour votre pronostic — pas forcément pour votre camp. Le classement reflète les votes de tous les visiteurs, en direct.</p>
-    </div>
-    <div class="cockade" aria-hidden="true">
-      <div class="ribbon left"></div>
-      <div class="ribbon right"></div>
-      <div class="disc"></div>
-      <div class="ring"></div>
-      <div class="center"></div>
-    </div>
-  </div>
-
-  <div class="status" id="status"></div>
-
-  <div class="podium" id="podium"></div>
-
-  <p class="rest-label" id="restLabel">Le reste du classement</p>
-  <ul class="candidates" id="candidates"></ul>
-
-  <div class="foot">
-    <p class="total" id="total"></p>
-    <button class="reset" id="reset" style="display:none;">Changer mon vote</button>
-  </div>
-
-  <p class="disclaimer">
-    Site de pronostic communautaire, sans lien avec un institut de sondage et sans valeur scientifique. Un vote par visiteur. Les résultats reflètent l'opinion des internautes qui participent ici, pas une intention de vote représentative de la population française.
-  </p>
-
-  <div class="polls-section">
-    <h2 class="polls-title">Derniers sondages</h2>
-    <p class="polls-sub">Chiffres publiés par les instituts, mis à jour à la main. Ceci n'est pas le vote ci-dessus : ce sont de vraies intentions de vote mesurées auprès d'échantillons représentatifs.</p>
-    <div id="pollsList"></div>
-  </div>
-
-</div>
-
+<main>
+<section id="hero" class="hero">
+<h1>Tu veux partir de la France si LFI gagne ? Ce site est fait pour toi.</h1>
+<p>Réponds à quelques questions sur ta situation : on te propose les pays qui te correspondent le mieux. Le test est gratuit et tes réponses restent sur ton appareil : rien n'est envoyé, sauf si tu remplis toi-même le formulaire de contact à la fin.</p>
+<button class="btn" id="go">Commencer (2 min)</button>
+</section>
+<section id="quiz" class="hidden">
+<div class="step"><button class="back" id="back">← Retour</button><span id="stepTxt"></span></div>
+<div class="bar"><i id="barI"></i></div>
+<div id="q"></div>
+</section>
+<section id="res" class="hidden"></section>
+<p class="note">Site indépendant d'orientation, sans affiliation à un parti ni à un organisme officiel. Les résultats sont indicatifs et fondés sur des critères généraux : ils ne remplacent pas une étude personnalisée. Les conditions de visa, de travail, de fiscalité et de protection sociale changent : vérifie sur <a href="https://www.diplomatie.gouv.fr/fr/conseils-aux-voyageurs/" target="_blank" rel="noopener" style="color:var(--ac)">France Diplomatie</a> et auprès des autorités du pays avant toute décision.</p>
+</main>
 <script>
-  const CANDIDATES = [
-    { id: 'melenchon',   name: 'Jean-Luc Mélenchon',  party: 'La France insoumise' },
-    { id: 'lepen',       name: 'Marine Le Pen',       party: 'Rassemblement national' },
-    { id: 'attal',       name: 'Gabriel Attal',       party: 'Renaissance' },
-    { id: 'philippe',    name: 'Édouard Philippe',    party: 'Horizons' },
-    { id: 'glucksmann',  name: 'Raphaël Glucksmann',  party: 'Place publique' },
-    { id: 'retailleau',  name: 'Bruno Retailleau',    party: 'Les Républicains' },
-    { id: 'autre',       name: 'Autre / surprise',    party: '—' },
-  ];
-
-  const TALLY_KEY = 'votes-tally';
-  const VOTE_KEY = 'voted-for';
-
-  const podiumEl = document.getElementById('podium');
-  const listEl = document.getElementById('candidates');
-  const restLabelEl = document.getElementById('restLabel');
-  const statusEl = document.getElementById('status');
-  const totalEl = document.getElementById('total');
-  const resetEl = document.getElementById('reset');
-
-  let tally = {};
-  let votedFor = null;
-
-  function initials(name) {
-    return name.split(' ').filter(w => w[0] === w[0].toUpperCase()).map(w => w[0]).join('').slice(0, 2);
-  }
-
-  const AVATAR_TONES = ['#D2A64C', '#B0393F', '#A9B4CC', '#C08151', '#8C9AB8', '#E0BE7A', '#C77B7E', '#7C8CB0'];
-  function avatarTone(id) {
-    let hash = 0;
-    for (let i = 0; i < id.length; i++) hash = (hash * 31 + id.charCodeAt(i)) % AVATAR_TONES.length;
-    return AVATAR_TONES[hash];
-  }
-
-  function setStatus(msg) { statusEl.textContent = msg || ''; }
-
-  async function loadState() {
-    setStatus('Chargement des résultats…');
-    try {
-      const shared = await window.storage.get(TALLY_KEY, true);
-      tally = shared ? JSON.parse(shared.value) : {};
-    } catch (e) { tally = {}; }
-    try {
-      const personal = await window.storage.get(VOTE_KEY, false);
-      votedFor = personal ? personal.value : null;
-    } catch (e) { votedFor = null; }
-    setStatus('');
-    render();
-  }
-
-  async function castVote(id) {
-    if (votedFor) return;
-    setStatus('Enregistrement de ton vote…');
-    tally[id] = (tally[id] || 0) + 1;
-    votedFor = id;
-    render();
-    try {
-      await window.storage.set(TALLY_KEY, JSON.stringify(tally), true);
-      await window.storage.set(VOTE_KEY, id, false);
-      setStatus('Vote enregistré. Merci !');
-      setTimeout(() => setStatus(''), 2000);
-    } catch (e) {
-      setStatus("Le vote n'a pas pu être sauvegardé, réessaie.");
-    }
-  }
-
-  async function resetVote() {
-    setStatus('Réinitialisation…');
-    if (votedFor && tally[votedFor]) tally[votedFor] = Math.max(0, tally[votedFor] - 1);
-    votedFor = null;
-    render();
-    try {
-      await window.storage.set(TALLY_KEY, JSON.stringify(tally), true);
-      await window.storage.delete(VOTE_KEY, false);
-      setStatus('');
-    } catch (e) {
-      setStatus('Impossible de réinitialiser pour le moment.');
-    }
-  }
-
-  function render() {
-    const totalVotes = Object.values(tally).reduce((a, b) => a + b, 0);
-    const sorted = [...CANDIDATES].sort((a, b) => (tally[b.id] || 0) - (tally[a.id] || 0));
-    const maxVotes = Math.max(1, ...sorted.map(c => tally[c.id] || 0));
-
-    const top3 = totalVotes ? sorted.slice(0, 3) : [];
-    const rest = totalVotes ? sorted.slice(3) : sorted;
-
-    // podium
-    podiumEl.innerHTML = '';
-    if (!totalVotes) {
-      podiumEl.classList.add('empty');
-      podiumEl.innerHTML = `
-        <div class="podium-empty-mark"></div>
-        <div class="podium-empty-text">Personne n'a encore voté — sois le premier</div>
-      `;
-      restLabelEl.textContent = 'Tous les candidats';
-      renderRest(rest, 0, 1);
-      totalEl.innerHTML = `<strong>0</strong> vote exprimé`;
-      resetEl.style.display = 'none';
-      return;
-    }
-    podiumEl.classList.remove('empty');
-    restLabelEl.textContent = 'Le reste du classement';
-    top3.forEach((c, i) => {
-      const place = i + 1;
-      const votes = tally[c.id] || 0;
-      const pct = totalVotes ? Math.round((votes / totalVotes) * 100) : 0;
-      const heights = { 1: 118, 2: 82, 3: 60 };
-      const barHeight = totalVotes ? Math.max(28, (votes / maxVotes) * heights[place]) : heights[place] * 0.35;
-      const isVoted = votedFor === c.id;
-
-      const spot = document.createElement('div');
-      spot.className = 'p-spot' + (votedFor ? ' disabled' : '') + (isVoted ? ' voted' : '');
-      spot.dataset.place = place;
-      spot.innerHTML = `
-        <div class="p-badge">${initials(c.name)}</div>
-        <div class="p-name">${c.name}</div>
-        <div class="p-party">${c.party}</div>
-        <div class="p-pct">${pct}%</div>
-        <div class="p-bar" style="height:${barHeight}px"></div>
-      `;
-      if (!votedFor) spot.addEventListener('click', () => castVote(c.id));
-      podiumEl.appendChild(spot);
-    });
-
-    renderRest(rest, totalVotes, 4);
-
-    totalEl.innerHTML = `<strong>${totalVotes}</strong> vote${totalVotes === 1 ? '' : 's'} exprimé${totalVotes === 1 ? '' : 's'}`;
-    resetEl.style.display = votedFor ? 'inline' : 'none';
-  }
-
-  function renderRest(items, totalVotes, startRank) {
-    totalVotes = totalVotes || 0;
-    startRank = startRank || 1;
-    listEl.innerHTML = '';
-    items.forEach((c, i) => {
-      const votes = tally[c.id] || 0;
-      const pct = totalVotes ? Math.round((votes / totalVotes) * 100) : 0;
-      const isVoted = votedFor === c.id;
-
-      const li = document.createElement('li');
-      li.className = 'row' + (votedFor ? ' disabled' : '');
-      li.innerHTML = `
-        <span class="rank">${i + startRank}</span>
-        <div class="avatar" style="background:${avatarTone(c.id)}">${initials(c.name)}</div>
-        <div class="info">
-          <div class="name-line">
-            <span class="name">${c.name}</span>
-            <span class="party">${c.party}</span>
-            ${isVoted ? '<span class="check">Ton vote ✓</span>' : ''}
-          </div>
-          <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
-        </div>
-        <span class="pct">${pct}%</span>
-      `;
-      if (!votedFor) li.addEventListener('click', () => castVote(c.id));
-      listEl.appendChild(li);
-    });
-  }
-
-  // ---------------------------------------------------------------
-  // DERNIERS SONDAGES — à mettre à jour toi-même chaque semaine.
-  // Ajoute un nouvel objet en haut du tableau à chaque nouveau sondage.
-  // "results" : liste des candidats testés, du plus haut au plus bas score.
-  // ---------------------------------------------------------------
-  const POLLS = [
-    {
-      institute: 'Moyenne agrégée (5 derniers sondages)',
-      date: 'Mise à jour du 8 septembre 2026',
-      results: [
-        { name: 'Marine Le Pen', pct: 35 },
-        { name: 'Édouard Philippe', pct: 16.5 },
-        { name: 'Jean-Luc Mélenchon', pct: 16 },
-      ],
-      note: "Source : élections2027.com, moyenne simple des 5 dernières vagues (Ifop, Ipsos, Elabe, OpinionWay, Harris...). Ne constitue pas une prévision électorale."
-    },
-    {
-      institute: 'Ipsos bva–CESI / Le Parisien',
-      date: '5 septembre 2026',
-      results: [
-        { name: 'Marine Le Pen', pct: 35 },
-        { name: 'Édouard Philippe', pct: 15 },
-        { name: 'Jean-Luc Mélenchon', pct: 14 },
-        { name: 'Bruno Retailleau', pct: 8 },
-      ],
-      note: 'Terrain 31 août–2 septembre 2026, n=1500, méthode des quotas. Marge d\'erreur ±0,4 à 2,9 points selon les scores. Hypothèse testée : Glucksmann + Attal + Philippe.'
-    },
-  ];
-
-  function renderPolls() {
-    const pollsListEl = document.getElementById('pollsList');
-    pollsListEl.innerHTML = '';
-    POLLS.forEach(poll => {
-      const maxPct = Math.max(...poll.results.map(r => r.pct));
-      const card = document.createElement('div');
-      card.className = 'poll-card';
-      const rowsHtml = poll.results.map(r => `
-        <div class="poll-row">
-          <span class="poll-name">${r.name}</span>
-          <div class="poll-track"><div class="poll-fill" style="width:${(r.pct / maxPct) * 100}%"></div></div>
-          <span class="poll-pct">${r.pct}%</span>
-        </div>
-      `).join('');
-      card.innerHTML = `
-        <div class="poll-head">
-          <span class="poll-inst">${poll.institute}</span>
-          <span class="poll-date">${poll.date}</span>
-        </div>
-        ${rowsHtml}
-        ${poll.note ? `<p class="poll-note">${poll.note}</p>` : ''}
-      `;
-      pollsListEl.appendChild(card);
-    });
-  }
-
-  resetEl.addEventListener('click', resetVote);
-  loadState();
-  renderPolls();
+const SHEET_API=""; // URL de ton Apps Script Google Sheets (…/exec)
+const CONTACT_EMAIL=""; // secours : envoi par e-mail si SHEET_API est vide
+const C=[
+{id:"be",n:"🇧🇪 Belgique",eu:1,tax:1,jobs:3,aff:3,safe:3,health:5,warm:1,fam:4,lgbt:5,dist:1,L:{fr:5,en:3,es:0,de:1},al:["belgique","bruxelles","belgium"]},
+{id:"lu",n:"🇱🇺 Luxembourg",eu:1,tax:3,jobs:5,aff:1,safe:4,health:5,warm:1,fam:4,lgbt:5,dist:1,L:{fr:5,en:4,es:0,de:3},al:["luxembourg"]},
+{id:"ch",n:"🇨🇭 Suisse",eu:1,tax:4,jobs:5,aff:1,safe:5,health:5,warm:1,fam:5,lgbt:4,dist:1,L:{fr:4,en:4,es:0,de:5},al:["suisse","geneve","lausanne","zurich","switzerland"]},
+{id:"es",n:"🇪🇸 Espagne",eu:1,tax:2,jobs:2,aff:4,safe:4,health:4,warm:5,fam:4,lgbt:5,dist:1,L:{fr:1,en:2,es:5,de:0},al:["espagne","madrid","barcelone","spain"]},
+{id:"pt",n:"🇵🇹 Portugal",eu:1,tax:3,jobs:2,aff:4,safe:5,health:3,warm:5,fam:4,lgbt:5,dist:1,L:{fr:1,en:4,es:3,de:0},al:["portugal","lisbonne","porto"]},
+{id:"ie",n:"🇮🇪 Irlande",eu:1,tax:3,jobs:4,aff:1,safe:4,health:3,warm:1,fam:4,lgbt:5,dist:1,L:{fr:1,en:5,es:0,de:0},al:["irlande","dublin","ireland"]},
+{id:"de",n:"🇩🇪 Allemagne",eu:1,tax:1,jobs:4,aff:3,safe:4,health:4,warm:1,fam:4,lgbt:4,dist:1,L:{fr:1,en:3,es:0,de:5},al:["allemagne","berlin","munich","germany"]},
+{id:"nl",n:"🇳🇱 Pays-Bas",eu:1,tax:2,jobs:4,aff:1,safe:4,health:4,warm:1,fam:4,lgbt:5,dist:1,L:{fr:1,en:5,es:0,de:1},al:["pays-bas","amsterdam","hollande","netherlands"]},
+{id:"it",n:"🇮🇹 Italie",eu:1,tax:2,jobs:2,aff:3,safe:3,health:4,warm:4,fam:4,lgbt:3,dist:1,L:{fr:1,en:2,es:2,de:0},al:["italie","rome","milan","italy"]},
+{id:"ca",n:"🇨🇦 Canada",eu:0,hard:1,wh:1,tax:2,jobs:4,aff:2,safe:4,health:3,warm:1,fam:5,lgbt:5,dist:3,L:{fr:3,en:5,es:0,de:0},al:["canada","quebec","montreal","toronto"]},
+{id:"uk",n:"🇬🇧 Royaume-Uni",eu:0,hard:1,tax:3,jobs:4,aff:1,safe:3,health:3,warm:1,fam:3,lgbt:4,dist:1,L:{fr:1,en:5,es:0,de:0},al:["royaume-uni","angleterre","londres","uk","london"]},
+{id:"au",n:"🇦🇺 Australie",eu:0,hard:1,wh:1,tax:2,jobs:4,aff:2,safe:4,health:4,warm:4,fam:5,lgbt:5,dist:3,L:{fr:1,en:5,es:0,de:0},al:["australie","sydney","melbourne","australia"]},
+{id:"ae",n:"🇦🇪 Émirats arabes unis",eu:0,hard:1,tax:5,jobs:4,aff:2,safe:5,health:4,warm:5,fam:3,lgbt:1,dist:2,L:{fr:2,en:5,es:0,de:0},al:["emirats","dubai","abu dhabi","uae"]},
+{id:"ma",n:"🇲🇦 Maroc",eu:0,tax:3,jobs:1,aff:5,safe:3,health:2,warm:5,fam:3,lgbt:1,dist:2,L:{fr:4,en:1,es:1,de:0},al:["maroc","marrakech","casablanca","morocco"]},
+{id:"mu",n:"🇲🇺 Île Maurice",eu:0,tax:5,jobs:2,aff:3,safe:4,health:3,warm:5,fam:4,lgbt:2,dist:3,L:{fr:5,en:4,es:0,de:0},al:["maurice","ile maurice","mauritius"]}
+];
+const REG=["Île-de-France","Hauts-de-France","Grand Est","Bourgogne-Franche-Comté","Auvergne-Rhône-Alpes","Provence-Alpes-Côte d'Azur / Corse","Occitanie","Nouvelle-Aquitaine","Pays de la Loire","Bretagne","Normandie","Centre-Val de Loire","Outre-mer"];
+const Q=[
+{k:"age",t:"Quel âge as-tu ?",o:["18-25 ans","26-35 ans","36-50 ans","51 ans et plus"]},
+{k:"sex",t:"Tu es…",h:"Certains pays sont plus ou moins sûrs ou ouverts selon le profil.",o:["Une femme","Un homme","Autre / je préfère ne pas dire"]},
+{k:"sit",t:"Ta situation familiale",o:["Seul(e)","En couple, sans enfants","En couple avec enfants","Parent solo"]},
+{k:"sal",t:"Ton revenu net mensuel (foyer ou toi)",o:["Moins de 1 500 €","1 500 – 2 500 €","2 500 – 4 000 €","4 000 – 7 000 €","Plus de 7 000 €"]},
+{k:"job",t:"Ton statut",o:["Salarié(e)","Indépendant(e) / entrepreneur","Étudiant(e)","Retraité(e)","En recherche d'emploi"]},
+{k:"remote",t:"Peux-tu télétravailler depuis l'étranger ?",o:["Oui, 100 %","En partie","Non"]},
+{k:"dip",t:"Ton niveau d'études",o:["Bac ou moins","Bac+2 / Bac+3","Bac+5 et plus"]},
+{k:"lang",t:"Quelles langues parles-tu ?",h:"Plusieurs choix possibles.",m:4,o:["Français","Anglais courant","Espagnol","Allemand"]},
+{k:"reg",t:"Tu habites où en France ?",sel:REG},
+{k:"sav",t:"Quelle épargne pour financer le départ ?",o:["Moins de 2 000 €","2 000 – 10 000 €","10 000 – 30 000 €","Plus de 30 000 €"]},
+{k:"visa",t:"Les démarches de visa, ça te va ?",o:["Non, je préfère sans visa (UE/Suisse)","Oui si c'est nécessaire"]},
+{k:"dur",t:"Tu partirais pour…",o:["Quelques années","Définitivement","Je ne sais pas encore"]},
+{k:"pri",t:"Tes 3 priorités principales",h:"Choisis jusqu'à 3 réponses.",m:3,o:["Payer moins d'impôts","Trouver un bon emploi","Coût de la vie bas","Sécurité","Santé de qualité","Climat chaud","Écoles et vie de famille","Rester proche de la France","Ouverture et droits LGBT"]},
+{k:"dest",t:"Tu as déjà une idée du pays ?",h:"Champ libre, tu peux laisser vide.",txt:1}
+];
+let i=0,A={};
+const $=id=>document.getElementById(id);
+const norm=s=>s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
+$("go").onclick=()=>{$("hero").classList.add("hidden");$("quiz").classList.remove("hidden");show()};
+$("back").onclick=()=>{if(i>0){i--;show()}else{$("quiz").classList.add("hidden");$("hero").classList.remove("hidden")}};
+function show(){
+ const q=Q[i];if(q.k==="lang"&&!A.lang)A.lang=["Français"];$("stepTxt").textContent=(i+1)+" / "+Q.length;$("barI").style.width=((i)/Q.length*100)+"%";
+ let h=`<h2>${q.t}</h2>`+(q.h?`<p class="hint">${q.h}</p>`:'<p class="hint"></p>');
+ if(q.sel){h+=`<select id="s"><option value="">Choisis…</option>${q.sel.map(x=>`<option${A[q.k]===x?" selected":""}>${x}</option>`).join("")}</select><button class="btn" id="n">Continuer</button>`}
+ else if(q.txt){h+=`<input type="text" id="s" placeholder="Ex : Canada, Portugal, Dubaï…" value="${A[q.k]||""}"><button class="btn" id="n">Voir mes résultats</button>`}
+ else{h+=`<div class="opts">${q.o.map((x,j)=>`<button class="opt${(q.m?(A[q.k]||[]):[A[q.k]]).includes(x)?" on":""}" data-v="${x}">${x}</button>`).join("")}</div>`+(q.m?`<button class="btn" id="n" style="margin-top:14px">Continuer</button>`:"")}
+ $("q").innerHTML=h;
+ document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const v=b.dataset.v;
+  if(q.m){let a=A[q.k]||[];if(a.includes(v))a=a.filter(x=>x!==v);else{if(a.length<q.m)a=[...a,v]}A[q.k]=a;b.parentNode.querySelectorAll(".opt").forEach(x=>x.classList.toggle("on",a.includes(x.dataset.v)))}
+  else{A[q.k]=v;next()}});
+ if($("n"))$("n").onclick=()=>{if($("s"))A[q.k]=$("s").value;next()};
+}
+function next(){i++;if(i>=Q.length){$("quiz").classList.add("hidden");compute()}else show()}
+function rank(A){
+ const w={tax:.3,jobs:.3,aff:.3,safe:.3,health:.3,warm:.1,fam:.1,lgbt:.1,dist:.1,lang:1.5};
+ const p=A.pri||[];
+ const SAL=["Moins de 1 500 €","1 500 – 2 500 €","2 500 – 4 000 €","4 000 – 7 000 €","Plus de 7 000 €"];
+ const si=SAL.indexOf(A.sal);
+ const M={"Payer moins d'impôts":"tax","Trouver un bon emploi":"jobs","Coût de la vie bas":"aff","Sécurité":"safe","Santé de qualité":"health","Climat chaud":"warm","Écoles et vie de famille":"fam","Rester proche de la France":"dist","Ouverture et droits LGBT":"lgbt"};
+ p.forEach(x=>w[M[x]]+=4);
+ if(si>=3)w.tax+=.8;
+ if(si<=1){w.aff+=1.2;w.jobs+=.6}
+ const kids=(A.sit&&A.sit.includes("enfants"))||A.sit==="Parent solo";
+ if(kids){w.fam+=2;w.safe+=.8;w.health+=.8}
+ if(A.sex==="Une femme")w.safe+=.8;
+ if(A.sex&&A.sex.startsWith("Autre"))w.lgbt+=1.5;
+ if(A.remote==="Oui, 100 %"){w.jobs=.1;w.tax+=.8;w.aff+=.8}
+ if(A.job==="Retraité(e)"){w.jobs=0;w.health+=1.5;w.warm+=1;w.aff+=1}
+ if(A.job==="Étudiant(e)"){w.aff+=1;w.jobs+=.3}
+ const sp=["fr"];(A.lang||[]).forEach(x=>{if(x==="Anglais courant")sp.push("en");if(x==="Espagnol")sp.push("es");if(x==="Allemand")sp.push("de")});
+ const young=A.age==="18-25 ans"||A.age==="26-35 ans";
+ const noVisa=A.visa&&A.visa.startsWith("Non");
+ const d=norm(A.dest||"");
+ return C.map(c=>{
+  const parts={};let s=0,tw=0;
+  for(const k in w){const v=k==="lang"?Math.max(...sp.map(l=>c.L[l]||0)):c[k];parts[k]=w[k]*Math.pow(v/5,1.6);s+=parts[k];tw+=w[k]}
+  let pc=s/tw*100;
+  const bl=Math.max(...sp.map(l=>c.L[l]||0));
+  const work=w.jobs>.5;if(bl<=1)pc*=work?.78:.93;else if(bl<=2)pc*=work?.9:.96;
+  if(si>=0&&si<=1){pc*=c.aff===1?.62:c.aff===2?.85:1}
+  else if(si===2&&c.aff===1)pc*=.9;
+  if(c.eu===0&&noVisa)pc*=.6;
+  if(A.sav==="Moins de 2 000 €"){pc*=c.dist===3?.8:c.dist===2?.9:1}else if(A.sav==="2 000 – 10 000 €"&&c.dist===3)pc*=.9;
+  if(c.hard){if(si<=1&&si>=0)pc*=.85;if(A.dip==="Bac ou moins")pc*=.9;if(A.job==="Retraité(e)")pc*=.85}
+  if(A.age==="51 ans et plus"&&c.eu===0)pc*=.9;
+  if(c.wh&&young&&A.visa&&!noVisa)pc+=4;
+  if(A.reg){const r=A.reg;if(["Grand Est","Hauts-de-France"].includes(r)&&["be","lu","de"].includes(c.id))pc+=2;if(["Occitanie","Nouvelle-Aquitaine"].includes(r)&&["es","pt"].includes(c.id))pc+=2;if(r==="Provence-Alpes-Côte d'Azur / Corse"&&c.id==="it")pc+=2;if(r==="Auvergne-Rhône-Alpes"&&c.id==="ch")pc+=1}
+  const wished=!!d&&c.al.some(a=>d.includes(a)||(a.includes(d)&&d.length>2));
+  if(wished)pc+=8;
+  return{c,pc:Math.min(97,Math.round(20+pc*.75)),parts,wished}
+ }).sort((a,b)=>b.pc-a.pc);
+}
+function compute(){const all=rank(A);render(all.slice(0,3),all)}
+const LB={tax:"Fiscalité avantageuse",jobs:"Marché de l'emploi porteur",aff:"Coût de la vie abordable",safe:"Sécurité",health:"Système de santé",warm:"Climat chaud",fam:"Bien pour les familles",lgbt:"Ouvert aux droits LGBT",dist:"Proche de la France",lang:"Langue facile pour toi"};
+function render(top,all){
+ const d=(A.dest||"").trim();
+ const known=all.some(r=>r.wished);
+ let h=`<h2>Tes pays les plus compatibles</h2><p class="hint">Calculé d'après tes réponses.</p>`;
+ top.forEach((r,j)=>{
+  const t=Object.entries(r.parts).sort((a,b)=>b[1]-a[1]).slice(0,3).map(x=>LB[x[0]]);
+  const visa=r.c.eu?"Pas de visa de travail nécessaire (libre circulation ou accord avec l'UE) — vérifie les formalités de résidence.":"Visa ou permis requis : conditions et délais à vérifier sur les sites officiels.";
+  h+=`<div class="card"><h3><span>${j+1}. ${r.c.n}</span><span class="pct">${r.pc}%</span></h3><div class="meter"><i style="width:${r.pc}%"></i></div><div class="tags">${t.map(x=>`<span class="tag">${x}</span>`).join("")}</div><p>${visa}${r.c.id==="ae"&&(A.sex!=="Un homme"||A.sit==="En couple, sans enfants")?" Attention : la législation y est très différente de la France sur plusieurs sujets (vie privée, droits des personnes LGBT, etc.).":""}</p></div>`});
+ if(d&&!known)h+=`<div class="card warn"><h3>Ton idée : ${d.replace(/</g,"&lt;")}</h3><p>Ce pays n'est pas encore dans notre base : renseigne-toi sur les conditions d'entrée, de travail et de fiscalité auprès de France Diplomatie et de l'ambassade concernée.</p></div>`;
+ if(d&&known&&!top.some(r=>r.wished)){const w=all.find(r=>r.wished);h+=`<div class="card warn"><h3>Ton idée : ${w.c.n}</h3><p>Compatibilité de ${w.pc}% d'après tes réponses. Ce n'est pas dans ton top 3, mais ça reste possible : compare les critères avant de décider.</p></div>`}
+ h+=`<div class="card help"><h3>🤝 Besoin d'un accompagnement pour tes démarches ?</h3><p style="color:var(--tx)">Laisse-nous tes coordonnées et on te recontacte pour t'aider dans tes démarches (visas, installation, papiers).</p><div class="price"><b>⚠️ L'aide dans les démarches est un service payant.</b> Le tarif te sera communiqué avant tout engagement. Le test reste gratuit, et aucun résultat (visa, installation) n'est garanti.</div><input type="text" id="fn" placeholder="Nom" autocomplete="family-name"><input type="text" id="fp" placeholder="Prénom" autocomplete="given-name"><input type="email" id="fm" placeholder="Adresse e-mail" autocomplete="email"><input type="tel" id="ft" placeholder="Numéro de téléphone" autocomplete="tel"><label class="chk"><input type="checkbox" id="fc"><span>J'accepte d'être recontacté(e) au sujet de cet accompagnement payant. Mes coordonnées, mes pays recommandés et mon pays souhaité seront utilisés uniquement à cette fin. Je peux demander leur suppression à tout moment.</span></label><button class="btn" id="sendBtn">Être recontacté(e)</button><div class="msg" id="fmsg"></div></div>`;
+ h+=`<button class="btn sec" id="re">Refaire le test</button>`;
+ $("res").innerHTML=h;$("res").classList.remove("hidden");$("sendBtn").onclick=()=>{
+  const v=id=>$(id).value.trim(),m=$("fmsg");m.className="msg err";
+  if(!v("fn")||!v("fp")||!/^\S+@\S+\.\S+$/.test(v("fm"))||v("ft").replace(/\D/g,"").length<8){m.textContent="Merci de remplir correctement tous les champs.";return}
+  if(!$("fc").checked){m.textContent="Merci d'accepter d'être recontacté(e) pour continuer.";return}
+  if(SHEET_API){
+   const btn=$("sendBtn");btn.disabled=true;m.className="msg";m.textContent="Envoi en cours…";
+   const payload={nom:v("fn"),prenom:v("fp"),email:v("fm"),tel:v("ft"),pays:top.map(r=>r.c.n).join(", "),souhait:d||"",consentement:true};
+   fetch(SHEET_API,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)})
+    .then(()=>{m.textContent="✅ Merci ! Ta demande a bien été envoyée, on te recontacte bientôt.";btn.textContent="Demande envoyée"})
+    .catch(()=>{btn.disabled=false;m.className="msg err";m.textContent="Échec de l'envoi. Réessaie dans un instant."});
+   return}
+  if(!CONTACT_EMAIL){m.textContent="Le service d'accompagnement n'est pas encore ouvert. Reviens bientôt !";return}
+  const body=`Nom : ${v("fn")}\nPrénom : ${v("fp")}\nE-mail : ${v("fm")}\nTéléphone : ${v("ft")}\nPays recommandés : ${top.map(r=>r.c.n).join(", ")}\nPays souhaité : ${d||"non précisé"}\n\nJe souhaite être recontacté(e) pour un accompagnement payant.`;
+  location.href="mailto:"+CONTACT_EMAIL+"?subject="+encodeURIComponent("Demande d'accompagnement démarches")+"&body="+encodeURIComponent(body);
+  m.className="msg";m.textContent="Ton application e-mail s'ouvre : envoie le message pour valider ta demande."};
+ $("re").onclick=()=>{A={};i=0;$("res").classList.add("hidden");$("hero").classList.remove("hidden")};
+ window.scrollTo(0,0)
+}
 </script>
-
 </body>
 </html>
